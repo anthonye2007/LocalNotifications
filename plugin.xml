@@ -42,18 +42,6 @@
             <plugin name="LocalNotification"
                 value="com.phonegap.plugin.localnotification.LocalNotification" />
         </config-file>
-
-        <source-file src="src/android/AlarmHelper.java"
-            target-dir="src/com/phonegap/plugin/localnotification" />
-        <source-file src="src/android/AlarmOptions.java"
-            target-dir="src/com/phonegap/plugin/localnotification" />
-        <source-file src="src/android/AlarmReceiver.java"
-            target-dir="src/com/phonegap/plugin/localnotification" />
-        <source-file src="src/android/AlarmRestoreOnBoot.java"
-            target-dir="src/com/phonegap/plugin/localnotification" />
-        <source-file src="src/android/LocalNotification.java"
-            target-dir="src/com/phonegap/plugin/localnotification" />
-
     </platform>
 
     <!-- ios -->
