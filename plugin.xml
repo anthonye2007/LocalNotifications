@@ -39,8 +39,9 @@
         </config-file>
 
         <config-file target="res/xml/config.xml" parent="/*">
-            <plugin name="LocalNotification"
-                value="com.phonegap.plugin.localnotification.LocalNotification" />
+            <feature name="LocalNotification">
+                <param name="android-package" value="com.phonegap.plugin.localnotification.LocalNotification" />
+            </feature>
         </config-file>
     </platform>
 
