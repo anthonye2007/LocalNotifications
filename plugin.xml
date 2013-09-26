@@ -1,60 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com.phonegap.plugin.localnotification"
-    version="1.0.0">
-
-    <name>Local Notification</name>
-    <description>
-        Notify a user at a pre-determined time using LocalNotifications on iOS or
-        alarms on Android.
-    </description>
-
-    <engines>
-        <!--
-            Cordova 2.8.0 is all I have tested on - it should work fine with earlier versions.
-            Please modify the below line, test, and submit a PR if it works for you.
-        -->
-        <engine name="cordova" version=">=3.0.0" />
-    </engines>
-
-    <asset src="www/LocalNotification.js" target="LocalNotification.js" />
+    version="0.2.1">
+    <name>LocalNotification</name>
+    <description>Cordova Device Plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,device</keywords>
 
     <!-- android -->
     <platform name="android">
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <activity android:name="com.phonegap.plugin.localnotification.LocalNotification"
-                      android:label="@string/app_name">
-                <intent-filter>
-                </intent-filter>
-            </activity>
-            <receiver android:name="com.phonegap.plugin.localnotification.AlarmReceiver" >
-            </receiver>
-
-            <receiver android:name="com.phonegap.plugin.localnotification.AlarmRestoreOnBoot" >
-                <intent-filter>
-                    <action android:name="android.intent.action.BOOT_COMPLETED" />
-                </intent-filter>
-            </receiver>
-        </config-file>
-
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="LocalNotification">
-                <param name="android-package" value="com.phonegap.plugin.localnotification.LocalNotification" />
+            <feature name="LocalNotification" >
+                <param name="android-package" value="com.phonegap.plugin.localnotification.LocalNotification"/>
             </feature>
         </config-file>
+
     </platform>
 
-    <!-- ios -->
-    <platform name="ios">
-        <plugins-plist key="LocalNotification"
-            string="LocalNotification" />
-
-        <config-file target="config.xml" parent="plugins">
-            <plugin name="LocalNotification" value="LocalNotification" />
-        </config-file>
-
-        <header-file src="src/ios/LocalNotification.h" />
-        <source-file src="src/ios/LocalNotification.m" />
-    </platform>
 </plugin>
