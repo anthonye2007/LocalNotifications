@@ -24,6 +24,10 @@
         <!--<source-file src="src/android/Device.java" target-dir="src/org/apache/cordova/device" />-->
         
         <source-file src="src/android/LocalNotification.java" target-dir="src/com/phonegap/plugin/localnotification" />
+        <source-file src="src/android/AlarmHelper.java" target-dir="src/com/phonegap/plugin/localnotification" />
+        <source-file src="src/android/AlarmOptions.java" target-dir="src/com/phonegap/plugin/localnotification" />
+        <source-file src="src/android/AlarmReceiver.java" target-dir="src/com/phonegap/plugin/localnotification" />
+        <source-file src="src/android/AlarmRestoreOnBoot.java" target-dir="src/com/phonegap/plugin/localnotification" />
 
     </platform>
 
