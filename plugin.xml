@@ -21,8 +21,18 @@
             </feature>
         </config-file>
         
-        <!--<source-file src="src/android/Device.java" target-dir="src/org/apache/cordova/device" />-->
-        
+        <config-file target="AndroidManifest.xml" parent="/*/application">
+            <activity android:label="@string/app_name" android:name="com.phonegap.plugin.localnotification.LocalNotification">
+                <intent-filter />
+            </activity>
+            <receiver android:name="com.phonegap.plugin.localnotification.AlarmReceiver" />
+            <receiver android:name="com.phonegap.plugin.localnotification.AlarmRestoreOnBoot">
+                <intent-filter>
+                    <action android:name="android.intent.action.BOOT_COMPLETED" />
+                </intent-filter>
+            </receiver>
+        </config-file>
+                
         <source-file src="src/android/LocalNotification.java" target-dir="src/com/phonegap/plugin/localnotification" />
         <source-file src="src/android/AlarmHelper.java" target-dir="src/com/phonegap/plugin/localnotification" />
         <source-file src="src/android/AlarmOptions.java" target-dir="src/com/phonegap/plugin/localnotification" />
