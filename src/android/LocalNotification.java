@@ -9,9 +9,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
-import org.apache.cordova.api.Plugin;
-import org.apache.cordova.api.PluginResult;
-
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 /**
  * This plugin utilizes the Android AlarmManager in combination with StatusBar
  * notifications. When a local notification is scheduled the alarm manager takes
@@ -20,7 +20,7 @@ import org.apache.cordova.api.PluginResult;
  * 
  * @author Daniel van 't Oever
  */
-public class LocalNotification extends Plugin {
+public class LocalNotification extends CordovaPlugin {
 
     public static final String PLUGIN_NAME = "LocalNotification";
 
@@ -31,12 +31,11 @@ public class LocalNotification extends Plugin {
     private AlarmHelper alarm = null;
 
     @Override
-    public PluginResult execute(String action, JSONArray optionsArr, String callBackId) {
-	alarm = new AlarmHelper(cordova.getContext());
+    public boolean execute(String action, JSONArray optionsArr, CallbackContext callbackContext) {
+	alarm = new AlarmHelper(cordova.getActivity());
 	Log.d(PLUGIN_NAME, "Plugin execute called with action: " + action);
-	Log.d(PLUGIN_NAME, "Plugin execute called with options: " + optionsArr);
 
-	PluginResult result = null;
+	boolean result = false;
 
 	final AlarmOptions alarmOptions = new AlarmOptions();
 	alarmOptions.parseOptions(optionsArr);
@@ -52,13 +51,19 @@ public class LocalNotification extends Plugin {
 	    final String ticker = alarmOptions.getAlarmTicker();
 
 	    persistAlarm(alarmId, optionsArr);
-	    return this.add(daily, title, subTitle, ticker, alarmId, alarmOptions.getCal());
+	    this.add(daily, title, subTitle, ticker, alarmId, alarmOptions.getCal());
+	    callbackContext.success();
+	    result = true;
 	} else if (action.equalsIgnoreCase("cancelNotification")) {
 	    unpersistAlarm(alarmId);
-	    return this.cancelNotification(alarmId);
+	    this.cancelNotification(alarmId);
+	    callbackContext.success();
+	    result = true;
 	} else if (action.equalsIgnoreCase("cancelAllNotifications")) {
 	    unpersistAlarmAll();
-	    return this.cancelAllNotifications();
+	    this.cancelAllNotifications();
+	    callbackContext.success();
+	    result = true;
 	}
 
 	return result;
@@ -82,19 +87,19 @@ public class LocalNotification extends Plugin {
      * @return A pluginresult.
      */
     public PluginResult add(boolean repeatDaily, String alarmTitle, String alarmSubTitle, String alarmTicker,
-	    String alarmId, Calendar cal) {
-	final long triggerTime = cal.getTimeInMillis();
-	final String recurring = repeatDaily ? "daily" : "onetime";
-
-	Log.d(PLUGIN_NAME, "Adding " + recurring + " notification: '" + alarmTitle + alarmSubTitle + "' with id: "
-		+ alarmId + " at timestamp: " + triggerTime);
-
-	boolean result = alarm.addAlarm(repeatDaily, alarmTitle, alarmSubTitle, alarmTicker, alarmId, cal);
-	if (result) {
-	    return new PluginResult(PluginResult.Status.OK);
-	} else {
-	    return new PluginResult(PluginResult.Status.ERROR);
-	}
+    		String alarmId, Calendar cal) {
+		final long triggerTime = cal.getTimeInMillis();
+		final String recurring = repeatDaily ? "daily" : "onetime";
+	
+		Log.d(PLUGIN_NAME, "Adding " + recurring + " notification: '" + alarmTitle + alarmSubTitle + "' with id: "
+			+ alarmId + " at timestamp: " + triggerTime);
+	
+		boolean result = alarm.addAlarm(repeatDaily, alarmTitle, alarmSubTitle, alarmTicker, alarmId, cal);
+		if (result) {
+		    return new PluginResult(PluginResult.Status.OK);
+		} else {
+		    return new PluginResult(PluginResult.Status.ERROR);
+		}
     }
 
     /**
@@ -126,7 +131,6 @@ public class LocalNotification extends Plugin {
 	 * all our alarms to loop through these alarms and unregister them one
 	 * by one.
 	 */
-
 	final SharedPreferences alarmSettings = cordova.getActivity().getSharedPreferences(PLUGIN_NAME, Context.MODE_PRIVATE);
 	final boolean result = alarm.cancelAll(alarmSettings);
 

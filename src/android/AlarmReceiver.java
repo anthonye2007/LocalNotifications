@@ -2,6 +2,9 @@ package com.phonegap.plugin.localnotification;
 
 import java.util.Calendar;
 
+import com.anthony.devotional.DevotionalThoughts;
+import com.anthony.devotional.R;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -68,14 +71,16 @@ public class AlarmReceiver extends BroadcastReceiver {
 		}
 
 		// Construct the notification and notificationManager objects
-		final NotificationManager notificationMgr = (NotificationManager) systemService;
-		final Notification notification = new Notification(R.drawable.ic_launcher, tickerText,
-				System.currentTimeMillis());
-		final PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(), 0);
-		notification.defaults |= Notification.DEFAULT_SOUND;
-		notification.vibrate = new long[] { 0, 100, 200, 300 };
-		notification.setLatestEventInfo(context, notificationTitle, notificationSubText, contentIntent);
-
+		// Construct the notification and notificationManager objects
+	    final NotificationManager notificationMgr = (NotificationManager) systemService;
+	    final Notification notification = new Notification(R.drawable.ic_launcher, tickerText,
+	            System.currentTimeMillis());
+	    Intent notificationIntent = new Intent(context, DevotionalThoughts.class);
+	    final PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+	    notification.defaults |= Notification.DEFAULT_SOUND;
+	    notification.vibrate = new long[] { 0, 100, 200, 300 };
+	    notification.flags |= Notification.FLAG_AUTO_CANCEL;
+	    notification.setLatestEventInfo(context, notificationTitle, notificationSubText, contentIntent);
 		/*
 		 * If you want all reminders to stay in the notification bar, you should
 		 * generate a random ID. If you want do replace an existing
